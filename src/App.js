@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
-export function App(props) {
+export default function App(props) {
+  const [enteredWord, setEnteredWord] = useState("");
+  const [definition, setDefinition] = useState("");
+
   const wordDictionary = [
     {
       word: "React",
@@ -10,19 +13,34 @@ export function App(props) {
     { word: "State", meaning: "An object that stores data for a component." },
   ];
 
-  let wordDefinition = "A reusable building block in React.";
+  const inputChangeHandler = (e) => {
+    setEnteredWord(e.target.value);
+  };
+
+  const searchHandler = () => {
+    for (let wordObj of wordDictionary) {
+      console.log(wordObj);
+
+      if (wordObj.word.toLowerCase() === enteredWord.toLowerCase()) {
+        setDefinition(wordObj.meaning);
+        return;
+      }
+    }
+    setDefinition("Word not found in the dictionary.");
+  };
 
   return (
     <div className="App">
       <h1>Dictionary App</h1>
-      <input type="text" placeholder="Search for a word..." />
-      <button>Search</button>
+      <input
+        type="text"
+        placeholder="Search for a word..."
+        onChange={inputChangeHandler}
+        value={enteredWord}
+      />
+      <button onClick={searchHandler}>Search</button>
       <h3>Definition:</h3>
-      <p>{wordDefinition}</p>
-      <p>"Word not found in the dictionary."</p>
+      {definition && <p>{definition}</p>}
     </div>
   );
 }
-
-// Log to console
-console.log("Hello console");
